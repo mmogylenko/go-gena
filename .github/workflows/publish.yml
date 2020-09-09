@@ -1,0 +1,89 @@
+name: Publish
+
+on:
+  push:
+    # Publish `v*` tags as releases.
+    tags:
+    - v*
+  pull_request:
+
+env:
+  IMAGE_NAME: khcheck-aws-iam-role
+
+jobs:
+  # Run tests.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Build
+      run: go build -v .
+
+    - name: Test
+      run: go test -v .
+
+  # Push image to GitHub Container Registry
+  ghcr_io:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    # Ensure test job passes before pushing image.
+    needs: test
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Image
+      run: |
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        docker build . --file Dockerfile --tag $IMAGE_NAME
+    - name: Login to GitHub Container Registry
+      run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Push image to GitHub
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+        # Change all uppercase to lowercase
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+        # Strip git ref prefix from version
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        # Strip "v" prefix from tag name
+        # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
+        # Push image with both version tag and `latest` tag
+        docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+        docker tag $IMAGE_NAME $IMAGE_ID:latest
+        docker push $IMAGE_ID:$VERSION
+        docker push $IMAGE_ID:latest
+  docker_hub:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    # Ensure test job passes before pushing image.
+    needs: test
+    steps:
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Build Image
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          docker build . --file Dockerfile --tag $IMAGE_NAME
+      - name: Log into Docker Hub
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u mmogylenko --password-stdin
+
+      - name: Push new latest image
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          IMAGE_ID=mmogylenko/$IMAGE_NAME
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:latest
+          docker push $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:latest
