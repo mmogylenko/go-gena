@@ -8,7 +8,7 @@ on:
   pull_request:
 
 env:
-  IMAGE_NAME: khcheck-aws-iam-role
+  IMAGE_NAME: go-gena
 
 jobs:
   # Run tests.
