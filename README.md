@@ -1,6 +1,6 @@
 # Go Gena!
 
-![Go](https://github.com/mmogylenko/go-gena/workflows/Go/badge.svg) ![Gosec](https://github.com/mmogylenko/kuberhealthy-aws-iam-role-check/workflows/go-gena/badge.svg) [![GitHub tag](https://img.shields.io/github/tag/mmogylenko/go-gena.svg)](https://github.com/mmogylenko/go-gena/tags/)
+![Go](https://github.com/mmogylenko/go-gena/workflows/Go/badge.svg) ![Gosec](https://github.com/mmogylenko/workflows/go-gena/badge.svg) [![GitHub tag](https://img.shields.io/github/tag/mmogylenko/go-gena.svg)](https://github.com/mmogylenko/go-gena/tags/)
 
 ![go-gena](https://user-images.githubusercontent.com/7536624/92551931-42128880-f214-11ea-8ebb-a71817168353.png)
 
