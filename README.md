@@ -22,10 +22,12 @@ To start load generator run container and expose *8080* port to local machine
 docker run -p 8080:8080/tcp go-gena:latest
 ```
 
-Using `curl` or [httpie](https://github.com/httpie/httpie) make GET request to `localhost:8080/start`
-![go-gena-start](https://user-images.githubusercontent.com/7536624/92623296-e3342a00-f27a-11ea-9130-57c03721fa97.png)
-Stop load by making GET request to `localhost:8080/stop`
-![gena-go-stop](https://user-images.githubusercontent.com/7536624/92623469-1d9dc700-f27b-11ea-8c46-1691d5659d85.png)
+Using `curl` or [httpie](https://github.com/httpie/httpie) make GET request to `localhost:8080/calculate`
+![go-gena-calculate](https://user-images.githubusercontent.com/7536624/92655559-7f275b00-f2a6-11ea-9ce5-3ddadfd68783.png)
+### Examples
+
+Check [examples](examples) directory for a use-cases of `go-gena` usage
+
 ### Licensing
 
 This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
