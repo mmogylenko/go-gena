@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-demo
+spec:
+  type: ClusterIP
+  selector:
+    app: go-gena
+  ports:
+  - port: 80
+    targetPort: 8080

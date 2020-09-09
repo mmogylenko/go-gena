@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -16,13 +17,6 @@ func writeJSON(w http.ResponseWriter, msg string) {
 }
 
 func start(writer http.ResponseWriter, request *http.Request) {
-	//start load generator gouroutine
-	go load(ctx)
-	writeJSON(writer, "Started Load Generator")
-}
-
-func stop(writer http.ResponseWriter, request *http.Request) {
-	// cancel ctx
-	cancel()
-	writeJSON(writer, "Stopping Load Generator")
+	result := calculate()
+	writeJSON(writer, fmt.Sprintf("x = %v", result))
 }
