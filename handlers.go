@@ -3,20 +3,17 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+
+	"github.com/mmogylenko/flexmessage"
 )
 
-func writeJSON(w http.ResponseWriter, msg string) {
+func start(w http.ResponseWriter, r *http.Request) {
+	var notify flexmessage.FlexMessage
 	w.Header().Add("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(map[string]string{"message": msg}); err != nil {
-		w.WriteHeader(503)
-		log.Fatal(err)
-	}
 
-}
-
-func start(writer http.ResponseWriter, request *http.Request) {
 	result := calculate()
-	writeJSON(writer, fmt.Sprintf("x = %v", result))
+	notify.Message(fmt.Sprintf("%f", result))
+
+	_ = json.NewEncoder(w).Encode(notify.Compact())
 }
