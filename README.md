@@ -1,4 +1,4 @@
-# Go Gena!
+# Go Gena
 
 ![Go](https://github.com/mmogylenko/go-gena/workflows/Go/badge.svg) ![Gosec](https://github.com/mmogylenko/go-gena/workflows/Gosec/badge.svg) [![GitHub tag](https://img.shields.io/github/tag/mmogylenko/go-gena.svg)](https://github.com/mmogylenko/go-gena/tags/)
 
@@ -7,14 +7,14 @@
 
 **go-gena** is a simple load generator docker image with *REST* written on Go. Everyone writes [K8s HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/) Check with amazing `Code.education Rocks!` output but no-one publishes load generator image itself. Let's get it fixed!
 
-### Installation
+## Installation
 **go-gena** is available both from [Docker Hub](https://hub.docker.com/r/mmogylenko/go-gena) and [Github Container Registry](https://github.com/users/mmogylenko/packages/container/go-gena/)
 
 Example:
 ```bash
 docker pull mmogylenko/go-gena
 ```
-### Run
+## Run
 
 To start load generator run container and expose *8080* port to local machine
 
@@ -24,10 +24,10 @@ docker run -p 8080:8080/tcp go-gena:latest
 
 Using `curl` or [httpie](https://github.com/httpie/httpie) make GET request to `localhost:8080/calculate`
 ![go-gena-calculate](https://user-images.githubusercontent.com/7536624/92655559-7f275b00-f2a6-11ea-9ce5-3ddadfd68783.png)
-### Examples
+## Examples
 
 Check [examples](examples) directory for a use-cases of `go-gena` usage
 
-### Licensing
+## Licensing
 
 This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.

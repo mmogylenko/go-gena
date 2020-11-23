@@ -8,11 +8,12 @@ import (
 	"github.com/mmogylenko/flexmessage"
 )
 
-func start(w http.ResponseWriter, r *http.Request) {
+// CalculateHandler is One-shot math operation (square root)
+func CalculateHandler(w http.ResponseWriter, r *http.Request) {
 	var notify flexmessage.FlexMessage
 	w.Header().Add("Content-Type", "application/json")
 
-	result := calculate()
+	result := SquareRoot()
 	notify.Message(fmt.Sprintf("%f", result))
 
 	_ = json.NewEncoder(w).Encode(notify.Compact())
