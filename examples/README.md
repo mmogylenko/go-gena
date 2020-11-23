@@ -1,3 +1,5 @@
+# Examples
+
 ## Go Gena Use-cases
 
 Examples of `go-gena` usage

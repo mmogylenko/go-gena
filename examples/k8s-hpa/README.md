@@ -1,15 +1,13 @@
-## Kubernetes Horizontal Pod Autoscaler Demo
+# Kubernetes Horizontal Pod Autoscaler Demo
 
-  * [Run & expose go-gena (via hpa-demo service)](#run---expose-go-gena--via-hpa-demo-service-)
-  * [Create Horizontal Pod Autoscaler](#create-horizontal-pod-autoscaler)
-  * [Generate Load](#generate-load)
-  * [Cleanup](#cleanup)
-
-## Kubernetes Horizontal Pod Autoscaler Demo
+- [Run & expose go-gena (via hpa-demo service)](#run---expose-go-gena--via-hpa-demo-service-)
+- [Create Horizontal Pod Autoscaler](#create-horizontal-pod-autoscaler)
+- [Generate Load](#generate-load)
+- [Cleanup](#cleanup)
 
 To demonstrate Horizontal Pod Autoscaler we will use a custom `go-gena` docker image.
 
-### Run & expose go-gena (via hpa-demo service)
+## Run & expose go-gena (via hpa-demo service)
 - create `hpa-demo` service:
 ```bash
 ➜  k8s-hpa-demo kubectl apply -f service.yml
@@ -35,7 +33,7 @@ go-gena-9b7cb9b86-vs59b   1/1     Running   0          116s
 ➜  k8s-hpa-demo
 ```
 
-### Create Horizontal Pod Autoscaler
+## Create Horizontal Pod Autoscaler
 
 ```bash
 ➜  k8s-hpa-demo kubectl autoscale deployment go-gena --cpu-percent=50 --min=1 --max=10
@@ -50,7 +48,7 @@ go-gena   Deployment/go-gena   0%/50%    1         10        1          38s
 ➜  k8s-hpa-demo
 ```
 
-### Generate Load
+## Generate Load
 
 Run `busybox` container and hit `hpa-demo` service:
 ```bash
@@ -87,7 +85,7 @@ go-gena-9b7cb9b86-lf88b   1/1     Running       0          33s
 Here, CPU consumption has increased to 200% of the request. As a result, the deployment was resized to 4 replicas
 
 
-### Cleanup
+## Cleanup
 
 - Stop `load-generator`
 - Delete HPA/DEPLOYMENT/SERVICE
