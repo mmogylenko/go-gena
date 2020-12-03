@@ -7,9 +7,6 @@ on:
     - v*
   pull_request:
 
-env:
-  IMAGE_NAME: go-gena
-
 jobs:
   # Run tests.
   test:
@@ -43,7 +40,7 @@ jobs:
       id: docker_meta
       uses: crazy-max/ghaction-docker-meta@v1
       with:
-        images: ${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }},ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ IMAGE_NAME }}
+        images: ${{ secrets.DOCKER_USERNAME }}/${{ secrets.APPLICATION }},ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ secrets.APPLICATION }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
