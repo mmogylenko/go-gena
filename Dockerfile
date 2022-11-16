@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine AS builder
+FROM golang:1.19.3-alpine AS builder
 
 ARG VERSION=0.0.1
 ARG TARGET_ARCH
@@ -34,5 +34,6 @@ RUN cp /build/${APP_NAME} .
 FROM scratch
 
 COPY --from=builder /app/${APP_NAME} /
+COPY --from=builder /app/web /
 
 CMD ["/go-gena"]

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="https://kubernetes.io/images/favicon.png"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      .v-application .v-parallax {
+        height: 100vh !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <v-app dark>
+        <v-main>
+          <div class="text-center">
+            <v-snackbar
+              :style="{'margin-bottom':calcMargin(i)}"
+              v-model="snackbar"
+              :timeout="timeout"
+              color="yellow darken-1 black--text"
+              dark
+              v-for="(m, i) in messages"
+              :key="i"
+            >
+              ${ m }
+              <template v-slot:action="{ attrs }">
+                <v-btn color="blue" text v-bind="attrs" @click="hide(i)">
+                  Clear
+                </v-btn>
+              </template>
+            </v-snackbar>
+          </div>
+          <section>
+            <v-parallax
+              id="parallax-hero"
+              :style="cuddleStyle"
+              src="https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png"
+            >
+              <v-layout column align-center justify-center class="white--text">
+                <img :src="image" height="128" />
+                <h1 class="white--text mb-2 display-1 text-xs-center">
+                  ${ info.message }
+                </h1>
+                <div class="subheading mb-3 text-xs-center">
+                  Served by <b>${ info.hostname }</b>
+                </div>
+                <v-btn class="yellow darken-2 mt-5" dark large @click="clear()">
+                  <v-badge left color="yellow black--text" dark>
+                    <span slot="badge">${ messages.length }</span>
+                    <v-icon left dark>touch_app</v-icon>
+                  </v-badge>
+                  Clear messages
+                </v-btn>
+                <v-btn
+                  class="green darken-2 mt-5"
+                  dark
+                  large
+                  @click="calculate(); snackbar = true"
+                >
+                  Calculate
+                </v-btn>
+
+                <template>
+                  <v-timeline>
+                    <v-timeline-item :color="tlColor1"
+                      ><h3>${ tlName1 }</h3></v-timeline-item
+                    >
+                    <v-timeline-item :color="tlColor2"
+                      ><h3 slot="opposite">${ tlName2 }</h3></v-timeline-item
+                    >
+                  </v-timeline>
+                </template>
+              </v-layout>
+            </v-parallax>
+          </section>
+        </v-main>
+      </v-app>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script>
+      new Vue({
+        delimiters: ['${', '}'],
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: function () {
+          return {
+            info: {},
+            image: 'go-gena.png',
+            timer: '',
+            color: '',
+            calls: 0,
+            messages: [],
+            tlName1: '',
+            tlColor1: 'grey',
+            tlName2: '',
+            tlColor2: 'grey',
+            cuddleStyle: {
+              backgroundColor: '#34577c',
+            },
+            timeout: 2000,
+            snackbar: false,
+          };
+        },
+        created: function () {
+          this.getInfo();
+          this.timer = setInterval(this.getInfo, 3000);
+        },
+        methods: {
+          hide: function (i) {
+            this.messages.splice(i, 1);
+          },
+          clear: function () {
+            this.messages.splice(0, this.messages.length);
+          },
+          calcMargin: function (i) {
+            return i * 60 + 'px';
+          },
+          getInfo: function () {
+            var self = this;
+
+            fetch('api/info')
+              .then(async (response) => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                  const error = (data && data.message) || response.statusText;
+                  return Promise.reject(error);
+                }
+
+                if (self.info.version) {
+                  if (self.info.version != data.version) {
+                    console.log('New version', data.version);
+                  }
+                }
+                self.info = data;
+                document.title = data.title;
+
+                let verColor =
+                  parseInt(data.version.split('.').reverse()[0], 10) % 2 === 0
+                    ? 'blue'
+                    : 'green';
+                if (self.calls % 2 === 0) {
+                  self.tlColor2 += ' lighten-2';
+                  self.tlColor1 = verColor;
+                  self.tlName1 = data.version;
+                } else {
+                  self.tlColor1 += ' lighten-2';
+                  self.tlColor2 = verColor;
+                  self.tlName2 = data.version;
+                }
+                self.calls++;
+              })
+              .catch((error) => {
+                this.messages.push(error.message);
+              });
+          },
+          calculate: function () {
+            var self = this;
+            fetch(
+              'api/calculate/' +
+                Math.floor(Math.random() * (100000 - 100 + 1) + 100)
+            )
+              .then(async (response) => {
+                const data = await response.json();
+
+                if (!response.ok) {
+                  const error = (data && data.message) || response.statusText;
+                  return Promise.reject(error);
+                }
+                this.messages.push(data.message);
+              })
+              .catch((error) => {
+                this.messages.push(error.message);
+              });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
