@@ -28,10 +28,11 @@ jobs:
     - name: Run Tests
       run: go test -v .
 
+    - name: Download Gosec
+      run: curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sudo sh -s -- -b /usr/bin latest
+    
     - name: Run Gosec Security Scanner
-      uses: cosmos/gosec@master
-      with:
-        args: ./...
+      run: gosec ./...
 
     - name: Run golangci-lint
       uses: golangci/golangci-lint-action@v3.3.1
