@@ -1,4 +1,4 @@
-FROM golang:1.15-alpine AS builder
+FROM golang:1.19.3-alpine AS builder
 
 ARG VERSION=0.0.1
 ARG TARGET_ARCH
@@ -22,7 +22,7 @@ WORKDIR /build
 COPY . .
 
 # Build the application
-RUN go build -o ${APP_NAME} .
+RUN go build -ldflags "-X main.AppVersion=${VERSION}" -o ${APP_NAME} .
 
 # Move to /dist directory as the place for resulting binary folder
 WORKDIR /app 
@@ -34,5 +34,6 @@ RUN cp /build/${APP_NAME} .
 FROM scratch
 
 COPY --from=builder /app/${APP_NAME} /
+COPY web /web
 
 CMD ["/go-gena"]
