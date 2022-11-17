@@ -7,6 +7,10 @@
 
 **go-gena** is a simple load generator docker image with *REST* written on Go. Everyone writes [K8s HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/) Check with amazing `Code.education Rocks!` output but no-one publishes load generator image itself. Let's get it fixed!
 
+*Web interface*
+
+![go_gena_ui](https://user-images.githubusercontent.com/7536624/202356166-23d2523b-c02d-4160-a80e-95b08ff7731d.png)
+
 ## Installation
 **go-gena** is available both from [Docker Hub](https://hub.docker.com/r/mmogylenko/go-gena) and [Github Container Registry](https://github.com/users/mmogylenko/packages/container/go-gena/)
 
