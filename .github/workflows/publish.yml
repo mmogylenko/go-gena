@@ -30,6 +30,9 @@ jobs:
   # Push image to GitHub Container Registry and Docker Hub
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     if: github.event_name == 'push'
     # Ensure test job passes before pushing image.
     needs: test

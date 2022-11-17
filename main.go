@@ -25,7 +25,6 @@ var (
 )
 
 func main() {
-
 	router := mux.NewRouter()
 	router.Use(LOGMiddleware)
 
@@ -55,5 +54,4 @@ func main() {
 		Fatal().
 		Err(service.ListenAndServe()).
 		Msg("Failed to start service")
-
 }
