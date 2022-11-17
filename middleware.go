@@ -7,7 +7,6 @@ import (
 )
 
 func JSONMiddleware(next http.Handler) http.Handler {
-
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -17,7 +16,6 @@ func JSONMiddleware(next http.Handler) http.Handler {
 
 func LOGMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		logger.
 			Info().
 			Str("remote_addr", r.RemoteAddr).
