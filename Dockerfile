@@ -31,7 +31,8 @@ WORKDIR /app
 RUN cp /build/${APP_NAME} .
 
 # Build a small image
-FROM scratch
+# FROM scratch
+FROM ubuntu:latest
 
 COPY --from=builder /app/${APP_NAME} /
 COPY web /web
