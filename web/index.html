@@ -24,11 +24,18 @@
       href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
     <style>
       [v-cloak] {
         display: none;
       }
       .v-application .v-parallax {
+        height: 100vh !important;
+      }
+      .v-img {
         height: 100vh !important;
       }
     </style>
@@ -99,11 +106,27 @@
             </v-parallax>
           </section>
         </v-main>
+        <v-footer app bottom dark padless>
+          <v-card flat tile class="green darken-2 white--text text-center flex">
+            <v-card-text class="white--text">
+              ${ new Date().getFullYear() }. Powered by
+              <a
+                class="white--text"
+                href="https://github.com/mmogylenko/go-gena"
+                target="_blank"
+                >go-gena</a
+              >
+              - simple load generator docker image with
+              <a href="/swagger">REST</a> written on Go
+            </v-card-text>
+          </v-card>
+        </v-footer>
       </v-app>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
     <script>
       new Vue({
         delimiters: ['${', '}'],
@@ -112,6 +135,7 @@
         data: function () {
           return {
             info: {},
+            icons: ['mdi-api', 'mdi-github'],
             image: 'go-gena.png',
             timer: '',
             color: '',

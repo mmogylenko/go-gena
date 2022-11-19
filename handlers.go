@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"strconv"
@@ -64,5 +65,49 @@ func InfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		logger.Error().Err(err).Msg("Failed to encode JSON")
+	}
+}
+
+func CPULoadHandler(w http.ResponseWriter, r *http.Request) {
+	var RequestData = struct {
+		Interval   int `json:"interval"`
+		Percentage int `json:"percentage"`
+	}{}
+
+	defer r.Body.Close()
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		logger.Error().Err(err).Msg("Failed to read HTTP Request Body")
+
+		return
+	}
+
+	if err := json.Unmarshal(body, &RequestData); err != nil {
+		_ = json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+
+		return
+	}
+
+	if RequestData.Interval == 0 || RequestData.Percentage == 0 {
+		if err := json.NewEncoder(w).Encode(
+			map[string]string{
+				"error": "Interval or Percentage Parameters are not set",
+			}); err != nil {
+			logger.Error().Err(err).Msg("Failed to encode JSON")
+		}
+
+		return
+	}
+
+	go RunCPUTest(RequestData.Interval, RequestData.Percentage)
+
+	if err := json.NewEncoder(w).Encode(
+		map[string]string{
+			"message": fmt.Sprintf("Generating CPU Load for %d second(s)", RequestData.Interval),
+		}); err != nil {
+		logger.Error().Err(err).Msg("Failed to encode JSON")
+
+		return
 	}
 }
