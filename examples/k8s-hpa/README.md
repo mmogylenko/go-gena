@@ -54,14 +54,14 @@ Run `busybox` container and hit `hpa-demo` service:
 ```bash
 ➜  k8s-hpa-demo kubectl run -it --rm load-generator --image=busybox /bin/sh
 If you don't see a command prompt, try pressing enter.
-/ # while true; do wget -q -O- http://hpa-demo/calculate; done
-{"message":"x = 1.2249967104279836e+13"}
-{"message":"x = 1.599996213782816e+13"}
-{"message":"x = 2.024995714001388e+13"}
-{"message":"x = 2.4999952114394844e+13"}
-{"message":"x = 3.024994706372907e+13"}
-{"message":"x = 3.5999941990165695e+13"}
-{"message":"x = 4.2249936895982625e+13"}
+/ # while true; do wget -q -O- http://hpa-demo/api/calculate; done
+{"message":249995994525.7887}
+{"message":249995994525.7887}
+{"message":249995994525.7887}
+{"message":249995994525.7887}
+{"message":249995994525.7887}
+{"message":249995994525.7887}
+{"message":249995994525.7887}
 
 ......
 ```
